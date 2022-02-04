@@ -3,8 +3,8 @@ import Client from '../database';
 
 export type User = {
   id: number;
-  firstName: number;
-  lastName: number;
+  firstName: string;
+  lastName: string;
   password: number;
 };
 

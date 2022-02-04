@@ -20,8 +20,9 @@ export class ProductStore {
       conn.release();
 
       return result.rows;
+      
     } catch (err) {
-      throw new Error(`Could not get books. Error: ${err}`);
+      throw new Error(`Could not get product. Error: ${err}`);
     }
   }
 
@@ -56,7 +57,7 @@ export class ProductStore {
 
       return product;
     } catch (err) {
-      throw new Error(`Could not add new product ${name}. Error: ${err}`);
+      throw new Error(`Could not add new product ${p.name}. Error: ${err}`);
     }
   }
 
