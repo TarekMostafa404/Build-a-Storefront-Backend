@@ -478,11 +478,6 @@
     "locate-path" "^5.0.0"
     "path-exists" "^4.0.0"
 
-"firacode@^6.2.0":
-  "integrity" "sha512-t5R3aO2BmhRXnYtKXbImLVNsILuCIbJ/XlDzBufjpi3il8P/CVdpWco83Ud3r2Tl0gitAmyP4o1fbJ52ozV1jw=="
-  "resolved" "https://registry.npmjs.org/firacode/-/firacode-6.2.0.tgz"
-  "version" "6.2.0"
-
 "forwarded@0.2.0":
   "integrity" "sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow=="
   "resolved" "https://registry.npmjs.org/forwarded/-/forwarded-0.2.0.tgz"
