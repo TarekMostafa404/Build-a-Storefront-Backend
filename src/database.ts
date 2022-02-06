@@ -14,7 +14,7 @@ const {
 
 let client;
 
-console.log(ENV);
+// console.log(ENV);
 
 if (ENV === 'dev') {
   client = new Pool({
@@ -26,7 +26,6 @@ if (ENV === 'dev') {
 }
 
 if (ENV === 'test') {
-  
   client = new Pool({
     host: POSTGRES_HOST,
     database: POSTGRES_TEST_DB,
