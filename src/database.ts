@@ -16,7 +16,7 @@ let client;
 
 console.log(ENV);
 
-if (ENV === 'test') {
+if (ENV === 'dev') {
   client = new Pool({
     host: POSTGRES_HOST,
     database: POSTGRES_DB,
@@ -25,7 +25,8 @@ if (ENV === 'test') {
   });
 }
 
-if (ENV === 'dev') {
+if (ENV === 'test') {
+  
   client = new Pool({
     host: POSTGRES_HOST,
     database: POSTGRES_TEST_DB,
