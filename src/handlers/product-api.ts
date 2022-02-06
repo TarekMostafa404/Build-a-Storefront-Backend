@@ -17,7 +17,7 @@ productRoutes.get('/product/show/:id', async (req: Request, res: Response) => {
 
 productRoutes.post('/product/create', async (_req: Request, res: Response) => {
   const store = new ProductStore();
-  const p: Product = { id: 1, name: 'p1', price: 100, category: 'cat' };
+  const p: Product = { id: 1, name: 'p2', price: 150, category: 'c2' };
   const result = await store.create(p);
   res.send(result);
 });
