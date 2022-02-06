@@ -20,7 +20,6 @@ export class ProductStore {
       conn.release();
 
       return result.rows;
-      
     } catch (err) {
       throw new Error(`Could not get product. Error: ${err}`);
     }
