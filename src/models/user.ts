@@ -1,5 +1,5 @@
 // @ts-ignore
-import client from '../database';
+import Client from '../database';
 import bcrypt from 'bcrypt';
 
 export type User = {
@@ -13,8 +13,7 @@ export class UserStore {
   async index(): Promise<User[]> {
     try {
       // @ts-ignore
-
-      const conn = await client.connect();
+      const conn = await Client.connect();
       const sql = 'SELECT * FROM users';
 
       const result = await conn.query(sql);
@@ -31,7 +30,7 @@ export class UserStore {
     try {
       const sql = 'SELECT * FROM users WHERE id=($1)';
       // @ts-ignore
-      const conn = await client.connect();
+      const conn = await Client.connect();
 
       const result = await conn.query(sql, [id]);
 
@@ -39,7 +38,7 @@ export class UserStore {
 
       return result.rows[0];
     } catch (err) {
-      throw new Error(`Could not find User ${id}. Error: ${err}`);
+      throw new Error(`Could not find user ${id}. Error: ${err}`);
     }
   }
 
@@ -51,7 +50,7 @@ export class UserStore {
       // const hash = bcrypt.hashSync(u.password + pepper, parseInt(saltRounds));
 
       // @ts-ignore
-      const conn = await client.connect();
+      const conn = await Client.connect();
 
       const result = await conn.query(sql, [
         u.firstName,
@@ -73,15 +72,16 @@ export class UserStore {
     try {
       const sql = 'DELETE FROM users WHERE id=($1)';
       // @ts-ignore
-      const conn = await client.connect();
+      const conn = await Client.connect();
 
       const result = await conn.query(sql, [id]);
 
-      const User = result.rows[0];
+      const user = result.rows[0];
 
       conn.release();
 
-      return User;
+      return user;
+      
     } catch (err) {
       throw new Error(`Could not delete user ${id}. Error: ${err}`);
     }
