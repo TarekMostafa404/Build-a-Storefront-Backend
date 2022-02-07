@@ -14,7 +14,7 @@ const {
 
 let client;
 
-// console.log(ENV);
+console.log(`Active Environment is < ${ENV} >`);
 
 if (ENV === 'dev') {
   client = new Pool({

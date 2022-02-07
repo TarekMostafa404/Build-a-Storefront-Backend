@@ -3,22 +3,29 @@ import { UserStore, User } from '../models/user';
 
 const userRoutes = express.Router();
 
-userRoutes.get('/user/index', async (_req: Request, res: Response) => {
+userRoutes.get('/user', async (_req: Request, res: Response) => {
   const store = new UserStore();
+
   const result = await store.index();
+
   res.send(result);
 });
 
-userRoutes.get('/user/show/:id', async (req: Request, res: Response) => {
+userRoutes.get('/:id', async (req: Request, res: Response) => {
   const store = new UserStore();
+
   const result = await store.show(req.params.id);
+
   res.send(result);
 });
 
-userRoutes.post('/user/create', async (_req: Request, res: Response) => {
+userRoutes.post('/user/create', async (req: Request, res: Response) => {
   const store = new UserStore();
-  const u: User = { id: 2, firstName: 'f2', lastName: 'l2', password: 123 };
+
+  const u: User = req.body;
+
   const result = await store.create(u);
+
   res.send(result);
 });
 

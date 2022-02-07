@@ -12,7 +12,7 @@ export class UserStore {
   async index(): Promise<User[]> {
     try {
       // @ts-ignore
-      
+
       const conn = await client.connect();
       const sql = 'SELECT * FROM users';
 
