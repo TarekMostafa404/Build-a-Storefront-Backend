@@ -1,0 +1,1 @@
+INSERT INTO products (name, price, category) VALUES ('product_777',777,'category_777') RETURNING *;
