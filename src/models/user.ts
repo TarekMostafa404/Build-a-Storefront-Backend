@@ -6,7 +6,7 @@ export type User = {
   id: number;
   firstName: string;
   lastName: string;
-  password: number;
+  password: string;
 };
 
 export class UserStore {
