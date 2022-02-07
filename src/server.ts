@@ -6,7 +6,7 @@ import userRoutes from './handlers/user-api';
 import orderRoutes from './handlers/order-api';
 
 const app: express.Application = express();
-const address: string = '0.0.0.0:3000';
+const address: string = '3000';
 
 const corsOptions = {
   origin: 'http://someotherdomain.com',

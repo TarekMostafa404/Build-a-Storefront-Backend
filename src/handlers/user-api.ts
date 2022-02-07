@@ -23,9 +23,10 @@ userRoutes.post('/user/create', async (req: Request, res: Response) => {
   const store = new UserStore();
 
   const u: User = req.body;
-
+  console.log(`user object ${u.lastName}`);
+  
   const result = await store.create(u);
-
+  
   res.send(result);
 });
 

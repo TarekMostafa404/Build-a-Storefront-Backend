@@ -1,12 +1,12 @@
 // @ts-ignore
 import Client from '../database';
-import bcrypt from 'bcrypt';
+// import bcrypt from 'bcrypt';
 
 export type User = {
   id: number;
   firstName: string;
   lastName: string;
-  password: string;
+  password: number;
 };
 
 export class UserStore {
