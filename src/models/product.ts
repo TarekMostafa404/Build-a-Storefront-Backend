@@ -56,7 +56,7 @@ export class ProductStore {
 
       return product;
     } catch (err) {
-      throw new Error(`Could not add new product ${p}. Error: ${err}`);
+      throw new Error(`Could not add a new product ${p}. Error: ${err}`);
     }
   }
 

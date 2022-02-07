@@ -11,7 +11,7 @@ userRoutes.get('/user', async (_req: Request, res: Response) => {
   res.send(result);
 });
 
-userRoutes.get('/:id', async (req: Request, res: Response) => {
+userRoutes.get('/user/:id', async (req: Request, res: Response) => {
   const store = new UserStore();
 
   const result = await store.show(req.params.id);

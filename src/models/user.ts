@@ -1,5 +1,6 @@
 // @ts-ignore
 import client from '../database';
+import bcrypt from 'bcrypt';
 
 export type User = {
   id: number;
@@ -46,6 +47,9 @@ export class UserStore {
     try {
       const sql =
         'INSERT INTO Users (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
+
+      // const hash = bcrypt.hashSync(u.password + pepper, parseInt(saltRounds));
+
       // @ts-ignore
       const conn = await client.connect();
 
@@ -55,13 +59,13 @@ export class UserStore {
         u.password,
       ]);
 
-      const User = result.rows[0];
+      const user = result.rows[0];
 
       conn.release();
 
-      return User;
+      return user;
     } catch (err) {
-      throw new Error(`Could not add new User ${u}. Error: ${err}`);
+      throw new Error(`Could not add a new user ${u}. Error: ${err}`);
     }
   }
 
