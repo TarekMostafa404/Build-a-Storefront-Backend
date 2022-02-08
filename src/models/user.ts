@@ -45,7 +45,7 @@ export class UserStore {
   async create(u: User): Promise<User> {
     try {
       const sql =
-        'INSERT INTO Users (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
+        'INSERT INTO users (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
 
       // const hash = bcrypt.hashSync(u.password + pepper, parseInt(saltRounds));
 
@@ -81,7 +81,6 @@ export class UserStore {
       conn.release();
 
       return user;
-      
     } catch (err) {
       throw new Error(`Could not delete user ${id}. Error: ${err}`);
     }
