@@ -6,7 +6,7 @@ export type User = {
   id: number;
   firstName: string;
   lastName: string;
-  password: number;
+  password: string;
 };
 
 export class UserStore {
@@ -44,19 +44,20 @@ export class UserStore {
 
   async create(u: User): Promise<User> {
     try {
-      const sql =
-        'INSERT INTO users (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
-
-      // const hash = bcrypt.hashSync(u.password + pepper, parseInt(saltRounds));
-
       // @ts-ignore
       const conn = await Client.connect();
+
+      const sql =
+        'INSERT INTO users (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
 
       const result = await conn.query(sql, [
         u.firstName,
         u.lastName,
         u.password,
       ]);
+
+      // const hash = bcrypt.hashSync(u.password + this.pepper, parseInt(saltRounds));
+      // const result = await conn.query(sql, [u.password, hash]);
 
       const user = result.rows[0];
 
