@@ -1,1 +1,0 @@
-INSERT INTO orders (product_id, user_id, quantity, status) VALUES (555,444,777, false) RETURNING *;

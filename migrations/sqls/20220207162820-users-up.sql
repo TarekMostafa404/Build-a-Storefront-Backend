@@ -1,1 +1,0 @@
-INSERT INTO users (first_name, last_name, password) VALUES ('first_name_777','last_name_777','password_777') RETURNING *;
