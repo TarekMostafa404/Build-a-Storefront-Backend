@@ -1,7 +1,7 @@
 // @ts-ignore
-import Client from '../database';
-import bcrypt from 'bcrypt';
-import config from '../config';
+import Client from "../database";
+import bcrypt from "bcrypt";
+import config from "../config";
 
 export type User = {
   id: number;
@@ -10,12 +10,9 @@ export type User = {
   password: string;
 };
 
-const hashPassword = (password: string) => {
+const hashedPassword = (password: string) => {
   const salt = parseInt(config.salt as string, 10);
   return bcrypt.hashSync(`${password} ${config.pepper}`, salt);
-
-  // const hash = bcrypt.hashSync(u.password + this.pepper, parseInt(saltRounds));
-  // const result = await conn.query(sql, [u.password, hash]);
 };
 
 export class UserStore {
@@ -23,7 +20,7 @@ export class UserStore {
     try {
       // @ts-ignore
       const conn = await Client.connect();
-      const sql = 'SELECT * FROM users';
+      const sql = "SELECT * FROM users";
 
       const result = await conn.query(sql);
 
@@ -37,7 +34,7 @@ export class UserStore {
 
   async show(id: string): Promise<User> {
     try {
-      const sql = 'SELECT * FROM users WHERE id=($1)';
+      const sql = "SELECT * FROM users WHERE id=($1)";
       // @ts-ignore
       const conn = await Client.connect();
 
@@ -57,12 +54,12 @@ export class UserStore {
       const conn = await Client.connect();
 
       const sql =
-        'INSERT INTO users (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
+        "INSERT INTO users (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *";
 
       const result = await conn.query(sql, [
         u.firstName,
         u.lastName,
-        hashPassword(u.password),
+        hashedPassword(u.password),
         // u.password,
       ]);
 
@@ -78,7 +75,7 @@ export class UserStore {
 
   async delete(id: string): Promise<User> {
     try {
-      const sql = 'DELETE FROM users WHERE id=($1)';
+      const sql = "DELETE FROM users WHERE id=($1)";
       // @ts-ignore
       const conn = await Client.connect();
 
