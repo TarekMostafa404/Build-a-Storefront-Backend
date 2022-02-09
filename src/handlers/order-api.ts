@@ -1,25 +1,22 @@
 import express, { Request, Response } from 'express';
 import { OrderStore, Order } from '../models/order';
 
-const userRoutes = express.Router();
+const orderRoutes = express.Router();
 
-userRoutes.get('/order/', async (req: Request, res: Response) => {
+orderRoutes.get('/order/', async (_req: Request, res: Response) => {
   const store = new OrderStore();
   const result = await store.index();
   res.send(result);
 });
 
-userRoutes.get('/order/create', async (req: Request, res: Response) => {
+orderRoutes.post('/order/create', async (req: Request, res: Response) => {
   const store = new OrderStore();
-  const o: Order = {
-    id: 1,
-    status: true,
-    quantity: 2,
-    userID: 1,
-    productID: 5,
-  };
+
+  const o: Order = req.body;
+
   const result = await store.create(o);
+
   res.send(result);
 });
 
-export default userRoutes;
+export default orderRoutes;

@@ -3,10 +3,10 @@ import Client from '../database';
 
 export type Order = {
   id: number;
+  productID: number;
+  userID: number;
   quantity: number;
   status: boolean;
-  userID: number;
-  productID: number;
 };
 
 export class OrderStore {
@@ -45,15 +45,15 @@ export class OrderStore {
   async create(o: Order): Promise<Order> {
     try {
       const sql =
-        'INSERT INTO orders (quantity, status, user_id, product_id) VALUES($1, $2, $3, $4) RETURNING *';
+        'INSERT INTO orders (product_id, user_id, quantity, status ) VALUES($1, $2, $3, $4) RETURNING *';
       // @ts-ignore
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [
+        o.productID,
+        o.userID,
         o.quantity,
         o.status,
-        o.userID,
-        o.productID,
       ]);
 
       const order = result.rows[0];
