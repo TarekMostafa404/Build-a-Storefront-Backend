@@ -1,12 +1,21 @@
 // @ts-ignore
 import Client from '../database';
-// import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
+import config from '../config';
 
 export type User = {
   id: number;
   firstName: string;
   lastName: string;
   password: string;
+};
+
+const hashPassword = (password: string) => {
+  const salt = parseInt(config.salt as string, 10);
+  return bcrypt.hashSync(`${password} ${config.pepper}`, salt);
+
+  // const hash = bcrypt.hashSync(u.password + this.pepper, parseInt(saltRounds));
+  // const result = await conn.query(sql, [u.password, hash]);
 };
 
 export class UserStore {
@@ -53,11 +62,9 @@ export class UserStore {
       const result = await conn.query(sql, [
         u.firstName,
         u.lastName,
-        u.password,
+        hashPassword(u.password),
+        // u.password,
       ]);
-
-      // const hash = bcrypt.hashSync(u.password + this.pepper, parseInt(saltRounds));
-      // const result = await conn.query(sql, [u.password, hash]);
 
       const user = result.rows[0];
 
@@ -65,7 +72,7 @@ export class UserStore {
 
       return user;
     } catch (err) {
-      throw new Error(`Could not add a new user ${u}. Error: ${err}`);
+      throw new Error(`Could not add a new user ${u.firstName}. Error: ${err}`);
     }
   }
 
