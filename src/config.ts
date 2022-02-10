@@ -20,6 +20,6 @@ export default {
   database: ENV === 'dev' ? POSTGRES_DB : POSTGRES_test_DB,
   user: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
-  pepper:BCRYPT_PASSWORD,
-  salt:SALT_ROUNDS,
+  pepper: BCRYPT_PASSWORD,
+  salt: SALT_ROUNDS,
 };

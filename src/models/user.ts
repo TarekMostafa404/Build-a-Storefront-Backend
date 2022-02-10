@@ -12,10 +12,8 @@ export type User = {
 
 const hashPassword = (password: string) => {
   const salt = parseInt(config.salt as string, 10);
-  return bcrypt.hashSync(`${password} ${config.pepper}`, salt);
 
-  // const hash = bcrypt.hashSync(u.password + this.pepper, parseInt(saltRounds));
-  // const result = await conn.query(sql, [u.password, hash]);
+  return bcrypt.hashSync(`${password}${config.pepper}`, salt);
 };
 
 export class UserStore {
@@ -26,7 +24,7 @@ export class UserStore {
       const sql = 'SELECT * FROM users';
 
       const result = await conn.query(sql);
-
+      
       conn.release();
 
       return result.rows;
@@ -72,7 +70,7 @@ export class UserStore {
 
       return user;
     } catch (err) {
-      throw new Error(`Could not add a new user ${u.firstName}. Error: ${err}`);
+      throw new Error(`Could not add a new user ${u}. Error: ${err}`);
     }
   }
 
