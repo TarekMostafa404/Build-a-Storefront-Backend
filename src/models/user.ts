@@ -11,10 +11,9 @@ export type User = {
 };
 
 const hashPassword = (password: string) => {
-  // const salt = parseInt(config.salt as string, 10);
+  const salt = parseInt(config.salt as string, 10);
 
-  // return bcrypt.hashSync(`${password}${config.pepper}`, salt);
-  return bcrypt.hashSync(`${password}`, 10);
+  return bcrypt.hashSync(`${password}${config.pepper}`, salt);
 };
 
 export class UserStore {
@@ -102,7 +101,7 @@ export class UserStore {
 
       if (result.rows.length) {
         const dbpass = result.rows[0].password;
-        const isPasswordExist = bcrypt.compareSync(`${password}`, dbpass);
+        const isPasswordExist = bcrypt.compareSync(`${password}${config.pepper}`, dbpass);
         
         console.log(isPasswordExist);
 
