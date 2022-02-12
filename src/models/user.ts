@@ -2,18 +2,13 @@
 import Client from "../database";
 import bcrypt from "bcrypt";
 import config from "../config";
+import JwtHelper from "../routes/jwt-helper";
 
 export type User = {
   id: number;
   firstName: string;
   lastName: string;
   password: string;
-};
-
-const hashPassword = (password: string) => {
-  const salt = parseInt(config.salt as string, 10);
-
-  return bcrypt.hashSync(`${password}${config.pepper}`, salt);
 };
 
 export class UserStore {
@@ -56,14 +51,8 @@ export class UserStore {
 
       const sql =
         "INSERT INTO users (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *";
-      const hashed = hashPassword(u.password);
-      const result = await conn.query(sql, [
-        u.firstName,
-        u.lastName,
-        // hashPassword(u.password),
-        hashed,
-      ]);
-      console.log(hashed);
+      const hashed = JwtHelper.hashPassword(u.password);
+      const result = await conn.query(sql, [u.firstName, u.lastName, hashed]);
 
       const user = result.rows[0];
 
@@ -101,8 +90,8 @@ export class UserStore {
 
       if (result.rows.length) {
         const dbpass = result.rows[0].password;
-        const isPasswordExist = bcrypt.compareSync(`${password}${config.pepper}`, dbpass);
-        
+        const isPasswordExist = JwtHelper.validatePassword(password,dbpass);
+
         console.log(isPasswordExist);
 
         if (isPasswordExist) {
