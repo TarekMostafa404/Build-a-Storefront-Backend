@@ -1,5 +1,7 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { UserStore, User } from '../models/user';
+import Jwt from 'jsonwebtoken';
+import config from '../config';
 
 const userRoutes = express.Router();
 
@@ -27,6 +29,32 @@ userRoutes.post('/user/create', async (req: Request, res: Response) => {
   const result = await store.create(u);
 
   res.send(result);
+});
+
+userRoutes.post('/user/auth', async (req: Request, res: Response) => {
+  try {
+    const store = new UserStore();
+
+    const { name, password } = req.body;
+
+    const user = await store.auth(name, password);
+
+    const token = Jwt.sign({ user }, config.token as unknown as string);
+
+    if (!user) {
+      return res.status(401).json({
+        status: 'error',
+        msg: 'invalid user name or password',
+      });
+    }
+    return res.json({
+      status: 'success',
+      data: { ...user, token },
+      msg: 'valid user',
+    });
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 export default userRoutes;

@@ -24,7 +24,7 @@ export class UserStore {
       const sql = 'SELECT * FROM users';
 
       const result = await conn.query(sql);
-      
+
       conn.release();
 
       return result.rows;
@@ -89,6 +89,38 @@ export class UserStore {
       return user;
     } catch (err) {
       throw new Error(`Could not delete user ${id}. Error: ${err}`);
+    }
+  }
+
+  async auth(firstName: string, password: string): Promise<User | null> {
+    try {
+      const conn = await Client.connect();
+
+      const sql = 'SELECT first_name FROM users WHERE first_name=($1)';
+
+      const result = await conn.query(sql, [firstName]);
+
+      if (result.rows.length) {
+        const { password: hashPassword } = result.rows[0];
+
+        const isPasswordExist = bcrypt.compareSync(
+          `${password}+${config.pepper}`,
+          hashPassword
+        );
+
+        if (isPasswordExist) {
+          const sql = 'SELECT password FROM users WHERE password=($1)';
+
+          const user = await conn.query(sql, [password]);
+
+          return user.rows[0];
+        }
+      }
+      conn.release();
+
+      return null;
+    } catch (err) {
+      throw new Error(`Could not log in by user ${firstName}. Error: ${err}`);
     }
   }
 }
