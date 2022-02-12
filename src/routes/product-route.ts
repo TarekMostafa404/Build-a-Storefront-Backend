@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express';
 import { ProductStore, Product } from '../models/product';
+import  Jwt  from 'jsonwebtoken';
+import config from '../config';
 
 const productRoutes = express.Router();
 
@@ -20,6 +22,18 @@ productRoutes.get('/product/:id', async (req: Request, res: Response) => {
 });
 
 productRoutes.post('/product/create', async (req: Request, res: Response) => {
+  try {
+    const authorizationHeader = req.headers.authorization || "";
+        const token = authorizationHeader.split(' ')[1];
+       const jwtRes= Jwt.verify(token, config.token || "");
+console.log(jwtRes);
+
+  } catch (error) {
+    res.status(401).send("Unauthorized user");
+  }
+  
+  
+  
   const store = new ProductStore();
 
   const p: Product = req.body;
