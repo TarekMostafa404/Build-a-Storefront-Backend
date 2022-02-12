@@ -10,7 +10,7 @@ export type User = {
   password: string;
 };
 
-const hashPassword = (password: string) => {
+const hashedPassword = (password: string) => {
   const salt = parseInt(config.salt as string, 10);
 
   return bcrypt.hashSync(`${password}${config.pepper}`, salt);
@@ -60,7 +60,7 @@ export class UserStore {
       const result = await conn.query(sql, [
         u.firstName,
         u.lastName,
-        hashPassword(u.password),
+        hashedPassword(u.password),
         // u.password,
       ]);
 
