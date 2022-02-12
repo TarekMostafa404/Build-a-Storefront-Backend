@@ -4,7 +4,6 @@ import cors from 'cors';
 import productRoutes from './handlers/product-api';
 import userRoutes from './handlers/user-api';
 import orderRoutes from './handlers/order-api';
-import config from './config';
 
 const app: express.Application = express();
 const port: number = 3000;
