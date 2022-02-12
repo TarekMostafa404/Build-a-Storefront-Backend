@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import productRoutes from './handlers/product-api';
-import userRoutes from './handlers/user-api';
-import orderRoutes from './handlers/order-api';
+import productRoutes from './routes/product-route';
+import userRoutes from './routes/user-route';
+import orderRoutes from './routes/order-route';
 
 const app: express.Application = express();
 const port: number = 3000;
