@@ -10,7 +10,7 @@ export type User = {
   password: string;
 };
 
-const hashedPassword = (password: string) => {
+const hashPassword = (password: string) => {
   const salt = parseInt(config.salt as string, 10);
 
   return bcrypt.hashSync(`${password}${config.pepper}`, salt);
@@ -60,7 +60,7 @@ export class UserStore {
       const result = await conn.query(sql, [
         u.firstName,
         u.lastName,
-        hashedPassword(u.password),
+        hashPassword(u.password),
         // u.password,
       ]);
 
@@ -96,22 +96,27 @@ export class UserStore {
     try {
       const conn = await Client.connect();
 
-      const sql = 'SELECT first_name FROM users WHERE first_name=($1)';
+      const sql = 'SELECT * FROM users WHERE first_name=($1)';
 
       const result = await conn.query(sql, [firstName]);
 
       if (result.rows.length) {
-        const { password: hashPassword } = result.rows[0];
+        // const { password: hashPassword } = result.rows[0];
+        const dbpass = result.rows[0].password;
+        // console.log(firstName);
+        // console.log(password);
+        console.log(result.rows[0].password);
+        console.log(hashPassword(password));
 
         const isPasswordExist = bcrypt.compareSync(
-          `${password}+${config.pepper}`,
-          hashPassword
+          `${password}${config.pepper}`,
+          dbpass
         );
 
         if (isPasswordExist) {
-          const sql = 'SELECT password FROM users WHERE password=($1)';
+          const sql = 'SELECT * FROM users WHERE password=($1)';
 
-          const user = await conn.query(sql, [password]);
+          const user = await conn.query(sql, [firstName]);
 
           return user.rows[0];
         }

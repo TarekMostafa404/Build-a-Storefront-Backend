@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import { UserStore, User } from '../models/user';
 import Jwt from 'jsonwebtoken';
 import config from '../config';
@@ -35,11 +35,11 @@ userRoutes.post('/user/auth', async (req: Request, res: Response) => {
   try {
     const store = new UserStore();
 
-    const { name, password } = req.body;
+    const { firstName, password } = req.body;
 
-    const user = await store.auth(name, password);
+    const user = await store.auth(firstName, password);
 
-    const token = Jwt.sign({ user }, config.token as unknown as string);
+    const token = Jwt.sign({ user }, config.token as string);
 
     if (!user) {
       return res.status(401).json({
@@ -49,7 +49,7 @@ userRoutes.post('/user/auth', async (req: Request, res: Response) => {
     }
     return res.json({
       status: 'success',
-      data: { ...user, token },
+      data: { user, token },
       msg: 'valid user',
     });
   } catch (err) {
