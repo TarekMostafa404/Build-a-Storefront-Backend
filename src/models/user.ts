@@ -1,7 +1,7 @@
 // @ts-ignore
-import Client from '../database';
-import bcrypt from 'bcrypt';
-import config from '../config';
+import Client from "../database";
+import bcrypt from "bcrypt";
+import config from "../config";
 
 export type User = {
   id: number;
@@ -11,9 +11,10 @@ export type User = {
 };
 
 const hashPassword = (password: string) => {
-  const salt = parseInt(config.salt as string, 10);
+  // const salt = parseInt(config.salt as string, 10);
 
-  return bcrypt.hashSync(`${password}${config.pepper}`, salt);
+  // return bcrypt.hashSync(`${password}${config.pepper}`, salt);
+  return bcrypt.hashSync(`${password}`, 10);
 };
 
 export class UserStore {
@@ -21,7 +22,7 @@ export class UserStore {
     try {
       // @ts-ignore
       const conn = await Client.connect();
-      const sql = 'SELECT * FROM users';
+      const sql = "SELECT * FROM users";
 
       const result = await conn.query(sql);
 
@@ -35,7 +36,7 @@ export class UserStore {
 
   async show(id: string): Promise<User> {
     try {
-      const sql = 'SELECT * FROM users WHERE id=($1)';
+      const sql = "SELECT * FROM users WHERE id=($1)";
       // @ts-ignore
       const conn = await Client.connect();
 
@@ -55,14 +56,15 @@ export class UserStore {
       const conn = await Client.connect();
 
       const sql =
-        'INSERT INTO users (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
-
+        "INSERT INTO users (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *";
+      const hashed = hashPassword(u.password);
       const result = await conn.query(sql, [
         u.firstName,
         u.lastName,
-        hashPassword(u.password),
-        // u.password,
+        // hashPassword(u.password),
+        hashed,
       ]);
+      console.log(hashed);
 
       const user = result.rows[0];
 
@@ -76,7 +78,7 @@ export class UserStore {
 
   async delete(id: string): Promise<User> {
     try {
-      const sql = 'DELETE FROM users WHERE id=($1)';
+      const sql = "DELETE FROM users WHERE id=($1)";
       // @ts-ignore
       const conn = await Client.connect();
 
@@ -95,34 +97,20 @@ export class UserStore {
   async auth(firstName: string, password: string): Promise<User | null> {
     try {
       const conn = await Client.connect();
-
-      const sql = 'SELECT * FROM users WHERE first_name=($1)';
-
+      const sql = "SELECT * FROM users WHERE first_name=($1)";
       const result = await conn.query(sql, [firstName]);
 
       if (result.rows.length) {
-        // const { password: hashPassword } = result.rows[0];
         const dbpass = result.rows[0].password;
-        // console.log(firstName);
-        // console.log(password);
-        console.log(result.rows[0].password);
-        console.log(hashPassword(password));
-
-        const isPasswordExist = bcrypt.compareSync(
-          `${password}${config.pepper}`,
-          dbpass
-        );
+        const isPasswordExist = bcrypt.compareSync(`${password}`, dbpass);
+        
+        console.log(isPasswordExist);
 
         if (isPasswordExist) {
-          const sql = 'SELECT * FROM users WHERE password=($1)';
-
-          const user = await conn.query(sql, [firstName]);
-
-          return user.rows[0];
+          return result.rows[0];
         }
       }
       conn.release();
-
       return null;
     } catch (err) {
       throw new Error(`Could not log in by user ${firstName}. Error: ${err}`);

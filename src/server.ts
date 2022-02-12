@@ -6,7 +6,7 @@ import userRoutes from './routes/user-route';
 import orderRoutes from './routes/order-route';
 
 const app: express.Application = express();
-const port: number = 3000;
+const port: number = 8000;
 const corsOptions = {
   origin: 'http://someotherdomain.com',
   optionsSuccessStatus: 200,
