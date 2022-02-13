@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import Jwt from "jsonwebtoken";
 import config from "../config";
 import bcrypt from "bcrypt";
+import { User } from "../models/user";
 
 class JwtHelper {
   static verifyAuthToken(req: Request, res: Response, next: NextFunction) {
@@ -13,11 +14,14 @@ class JwtHelper {
     }
   }
 
-  static getCurrentUser(req: Request) {
+  static getCurrentUser(req: Request): User {
     const authorizationHeader = req.headers.authorization || "";
+
     const token = authorizationHeader.split(" ")[1];
+
     const jwtRes = Jwt.verify(token, config.token || "");
-    return jwtRes;
+
+    return (<any>jwtRes).user;
   }
 
   static hashPassword(password: string) {

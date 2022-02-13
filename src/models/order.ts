@@ -1,5 +1,5 @@
 // @ts-ignore
-import Client from '../database';
+import Client from "../database";
 
 export type Order = {
   id: number;
@@ -8,13 +8,13 @@ export type Order = {
 };
 
 export class OrderStore {
-  async index(): Promise<Order[]> {
+  async index(userId: number): Promise<Order[]> {
     try {
       // @ts-ignore
       const conn = await Client.connect();
-      const sql = 'SELECT * FROM orders';
+      const sql = "SELECT * FROM orders WHERE user_id=($1)";
 
-      const result = await conn.query(sql);
+      const result = await conn.query(sql, [userId]);
 
       conn.release();
 
@@ -26,7 +26,7 @@ export class OrderStore {
 
   async show(id: string): Promise<Order> {
     try {
-      const sql = 'SELECT * FROM orders WHERE id=($1)';
+      const sql = "SELECT * FROM orders WHERE id=($1)";
       // @ts-ignore
       const conn = await Client.connect();
 
@@ -43,7 +43,7 @@ export class OrderStore {
   async create(ord: Order): Promise<Order> {
     try {
       const sql =
-        'INSERT INTO orders (status, user_id) VALUES($1, $2) RETURNING *';
+        "INSERT INTO orders (status, user_id) VALUES($1, $2) RETURNING *";
       // @ts-ignore
       const conn = await Client.connect();
 
@@ -64,7 +64,7 @@ export class OrderStore {
   ): Promise<Order> {
     try {
       const sql =
-        'INSERT INTO order_products ( quantity, order_id, product_id ) VALUES($1, $2, $3) RETURNING *';
+        "INSERT INTO order_products ( quantity, order_id, product_id ) VALUES($1, $2, $3) RETURNING *";
       // @ts-ignore
       const conn = await Client.connect();
 
@@ -82,7 +82,7 @@ export class OrderStore {
 
   async delete(id: string): Promise<Order> {
     try {
-      const sql = 'DELETE FROM orders WHERE id=($1)';
+      const sql = "DELETE FROM orders WHERE id=($1)";
       // @ts-ignore
       const conn = await Client.connect();
 

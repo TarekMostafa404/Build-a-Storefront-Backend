@@ -4,9 +4,10 @@ import cors from 'cors';
 import productRoutes from './routes/product-route';
 import userRoutes from './routes/user-route';
 import orderRoutes from './routes/order-route';
+import config from './config';
 
 const app: express.Application = express();
-const port: number = 8000;
+const port = config.port || 8000;
 const corsOptions = {
   origin: 'http://someotherdomain.com',
   optionsSuccessStatus: 200,

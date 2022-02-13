@@ -1,12 +1,15 @@
 import express, { Request, Response } from "express";
+import { request } from "http";
 import { OrderStore, Order } from "../models/order";
 import JwtHelper from "./jwt-helper";
 
 const orderRoutes = express.Router();
 
-orderRoutes.get("/order", async (_req: Request, res: Response) => {
+orderRoutes.get("/order", JwtHelper.verifyAuthToken ,async (req: Request, res: Response) => {
+  const currentUserId = JwtHelper.getCurrentUser(req).id;
+
   const store = new OrderStore();
-  const result = await store.index();
+  const result = await store.index(currentUserId);
   res.send(result);
 });
 
