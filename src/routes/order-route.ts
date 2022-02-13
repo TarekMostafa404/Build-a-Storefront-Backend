@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { OrderStore, Order } from '../models/order';
+import JwtHelper from './jwt-helper';
 
 const orderRoutes = express.Router();
 
@@ -11,7 +12,7 @@ orderRoutes.get('/order/', async (_req: Request, res: Response) => {
 
 orderRoutes.post(
   '/order/create',
-  // JwtHelper.verifyAuthToken,
+  JwtHelper.verifyAuthToken,
   async (req: Request, res: Response) => {
     const store = new OrderStore();
 
