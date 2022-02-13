@@ -40,8 +40,6 @@ userRoutes.post('/user/auth', async (req: Request, res: Response) => {
     const user = await store.auth(firstName, password);
 
     const token = Jwt.sign({ user }, config.token as string);
-console.log(config.token);
-
 
     if (!user) {
       return res.status(401).json({
