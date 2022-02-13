@@ -6,11 +6,9 @@ import bcrypt from "bcrypt";
 class JwtHelper {
   static verifyAuthToken(req: Request, res: Response, next: NextFunction) {
     try {
-     JwtHelper.getCurrentUser(req);
+      JwtHelper.getCurrentUser(req);
       next();
     } catch (error) {
-      console.log(error);
-      
       res.status(401).send("Unauthorized user");
     }
   }

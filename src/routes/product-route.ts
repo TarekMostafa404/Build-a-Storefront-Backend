@@ -23,7 +23,7 @@ productRoutes.get("/product/:id", async (req: Request, res: Response) => {
 });
 
 productRoutes.post(
-  "/product/create",
+  "/product",
   JwtHelper.verifyAuthToken,
   async (req: Request, res: Response) => {
     const store = new ProductStore();

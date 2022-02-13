@@ -92,7 +92,6 @@ export class UserStore {
         const dbpass = result.rows[0].password;
         const isPasswordExist = JwtHelper.validatePassword(password,dbpass);
 
-        console.log(isPasswordExist);
 
         if (isPasswordExist) {
           return result.rows[0];

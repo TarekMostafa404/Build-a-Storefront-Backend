@@ -21,7 +21,7 @@ userRoutes.get('/user/:id', async (req: Request, res: Response) => {
   res.send(result);
 });
 
-userRoutes.post('/user/create', async (req: Request, res: Response) => {
+userRoutes.post('/user', async (req: Request, res: Response) => {
   const store = new UserStore();
 
   const u: User = req.body;

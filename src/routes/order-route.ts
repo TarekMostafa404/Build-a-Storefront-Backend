@@ -1,17 +1,17 @@
-import express, { Request, Response } from 'express';
-import { OrderStore, Order } from '../models/order';
-import JwtHelper from './jwt-helper';
+import express, { Request, Response } from "express";
+import { OrderStore, Order } from "../models/order";
+import JwtHelper from "./jwt-helper";
 
 const orderRoutes = express.Router();
 
-orderRoutes.get('/order/', async (_req: Request, res: Response) => {
+orderRoutes.get("/order", async (_req: Request, res: Response) => {
   const store = new OrderStore();
   const result = await store.index();
   res.send(result);
 });
 
 orderRoutes.post(
-  '/order/create',
+  "/order",
   JwtHelper.verifyAuthToken,
   async (req: Request, res: Response) => {
     const store = new OrderStore();
@@ -24,21 +24,25 @@ orderRoutes.post(
   }
 );
 
-orderRoutes.post('/order/:id/product', async (req: Request, res: Response) => {
-  const store = new OrderStore();
+orderRoutes.post(
+  "/order/:id/product",
+  JwtHelper.verifyAuthToken,
 
-  const quantity: number = parseInt(req.body.quantity);
-  const orderId: number = parseInt(req.params.id);
-  const productId: number = req.body.productId;
+  async (req: Request, res: Response) => {
+    const store = new OrderStore();
 
-  try {
-    const addedProduct = await store.addProduct(quantity, orderId, productId);
-    console.log('added');
+    const quantity: number = parseInt(req.body.quantity);
+    const orderId: number = parseInt(req.params.id);
+    const productId: number = req.body.productId;
 
-    res.json(addedProduct);
-  } catch (error) {
-    res.status(400).json(error);
+    try {
+      const addedProduct = await store.addProduct(quantity, orderId, productId);
+
+      res.json(addedProduct);
+    } catch (error) {
+      res.status(400).json(error);
+    }
   }
-});
+);
 
 export default orderRoutes;
