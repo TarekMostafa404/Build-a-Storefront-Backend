@@ -3,10 +3,8 @@ import Client from '../database';
 
 export type Order = {
   id: number;
-  productID: number;
-  userID: number;
-  quantity: number;
-  status: boolean;
+  userId: string;
+  status: string;
 };
 
 export class OrderStore {
@@ -42,24 +40,35 @@ export class OrderStore {
     }
   }
 
-  async addProduct(
-    quantity: number,
-    userID: string,
-    productID: string,
-    status: string
-  ): Promise<Order> {
+  async create(ord: Order): Promise<Order> {
     try {
       const sql =
-        'INSERT INTO order_products (  quantity,user_id, product_id,status ) VALUES($1, $2, $3, $4) RETURNING *';
+        'INSERT INTO orders (status, user_id) VALUES($1, $2) RETURNING *';
       // @ts-ignore
       const conn = await Client.connect();
 
-      const result = await conn.query(sql, [
-        productID,
-        userID,
-        quantity,
-        status,
-      ]);
+      const result = await conn.query(sql, [ord.status, ord.userId]);
+
+      const order = result.rows[0];
+      conn.release();
+      return order;
+    } catch (err) {
+      throw new Error(`Could not add a new product ${ord}. Error: ${err}`);
+    }
+  }
+
+  async addProduct(
+    quantity: number,
+    orderID: number,
+    productID: number
+  ): Promise<Order> {
+    try {
+      const sql =
+        'INSERT INTO order_products ( quantity, order_id, product_id ) VALUES($1, $2, $3) RETURNING *';
+      // @ts-ignore
+      const conn = await Client.connect();
+
+      const result = await conn.query(sql, [quantity, orderID, productID]);
 
       const order = result.rows[0];
 
