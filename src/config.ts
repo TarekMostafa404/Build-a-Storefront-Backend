@@ -17,7 +17,7 @@ const {
 } = process.env;
 
 export default {
-  port : PORT,
+  port: PORT,
   host: POSTGRES_HOST,
   dbPort: POSTGRES_PORT,
   database: ENV === 'dev' ? POSTGRES_DB : POSTGRES_test_DB,
