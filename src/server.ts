@@ -28,3 +28,5 @@ const port = config.port || 8000;
 app.listen(port, function () {
   console.log(`starting app on http://localhost:${port}`);
 });
+
+export default app;
