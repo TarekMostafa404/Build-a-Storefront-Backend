@@ -16,18 +16,14 @@ Your application must make use of the following libraries:
 1. Run comand `npm i`
 2. Configure the ENV file to the spicified data section
 3. Run migrations `db-migrate up`
-4. Run the required test 
+4. Run the required test
+
+### Database Creation
+
+1. Install `postgreSQL`
+2. Run this command `CREATE DATABASE shopping_app_test`
+3. Run this command `CREATE USER test_user PASSWORD 'password' CREATEDB CREATEUSER;`
 
 ### Evironment Data
 
-`PORT = 3000
-ENV = dev
-POSTGRES_PORT = 5432
-POSTGRES_HOST = 127.0.0.1
-POSTGRES_DB = shopping_app
-POSTGRES_DB_TEST = shopping_app_test
-POSTGRES_USER = postgres
-POSTGRES_PASSWORD = password
-BCRYPT_PASSWORD = keep_coding
-SALT_ROUNDS = 10
-TOKEN = udacity-token`
+`PORT = 3000 ENV = dev POSTGRES_PORT = 5432 POSTGRES_HOST = 127.0.0.1 POSTGRES_DB = shopping_app POSTGRES_DB_TEST = shopping_app_test POSTGRES_USER = postgres POSTGRES_PASSWORD = password BCRYPT_PASSWORD = keep_coding SALT_ROUNDS = 10 TOKEN = udacity-token`
