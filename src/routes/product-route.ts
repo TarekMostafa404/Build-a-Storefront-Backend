@@ -1,12 +1,10 @@
-import express, { Request, Response } from "express";
-import { ProductStore, Product } from "../models/product";
-import Jwt from "jsonwebtoken";
-import config from "../config";
-import JwtHelper from "./jwt-helper";
+import express, { Request, Response } from 'express';
+import { ProductStore, Product } from '../models/product';
+import JwtHelper from './jwt-helper';
 
 const productRoutes = express.Router();
 
-productRoutes.get("/product", async (_req: Request, res: Response) => {
+productRoutes.get('/product', async (_req: Request, res: Response) => {
   const store = new ProductStore();
 
   const result = await store.index();
@@ -14,7 +12,7 @@ productRoutes.get("/product", async (_req: Request, res: Response) => {
   res.send(result);
 });
 
-productRoutes.get("/product/:id", async (req: Request, res: Response) => {
+productRoutes.get('/product/:id', async (req: Request, res: Response) => {
   const store = new ProductStore();
 
   const result = await store.show(req.params.id);
@@ -22,8 +20,19 @@ productRoutes.get("/product/:id", async (req: Request, res: Response) => {
   res.send(result);
 });
 
+productRoutes.get(
+  '/product/delete/:id',
+  async (req: Request, res: Response) => {
+    const store = new ProductStore();
+
+    const result = await store.delete(req.params.id);
+
+    res.send(result);
+  }
+);
+
 productRoutes.post(
-  "/product",
+  '/product',
   JwtHelper.verifyAuthToken,
   async (req: Request, res: Response) => {
     const store = new ProductStore();

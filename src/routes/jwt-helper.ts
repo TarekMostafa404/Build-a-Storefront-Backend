@@ -1,8 +1,8 @@
-import express, { Request, Response, NextFunction } from "express";
-import Jwt from "jsonwebtoken";
-import config from "../config";
-import bcrypt from "bcrypt";
-import { User } from "../models/user";
+import { Request, Response, NextFunction } from 'express';
+import Jwt from 'jsonwebtoken';
+import config from '../config';
+import bcrypt from 'bcrypt';
+import { User } from '../models/user';
 
 class JwtHelper {
   static verifyAuthToken(req: Request, res: Response, next: NextFunction) {
@@ -10,16 +10,16 @@ class JwtHelper {
       JwtHelper.getCurrentUser(req);
       next();
     } catch (error) {
-      res.status(401).send("Unauthorized user");
+      res.status(401).send('Unauthorized user');
     }
   }
 
   static getCurrentUser(req: Request): User {
-    const authorizationHeader = req.headers.authorization || "";
+    const authorizationHeader = req.headers.authorization || '';
 
-    const token = authorizationHeader.split(" ")[1];
+    const token = authorizationHeader.split(' ')[1];
 
-    const jwtRes = Jwt.verify(token, config.token || "");
+    const jwtRes = Jwt.verify(token, config.token || '');
 
     return (<any>jwtRes).user;
   }

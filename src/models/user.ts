@@ -1,7 +1,5 @@
 // @ts-ignore
 import Client from "../database";
-import bcrypt from "bcrypt";
-import config from "../config";
 import JwtHelper from "../routes/jwt-helper";
 
 export type User = {
