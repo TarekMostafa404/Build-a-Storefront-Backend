@@ -2,38 +2,47 @@ import express, { Request, Response } from 'express';
 import { UserStore, User } from '../models/user';
 import Jwt from 'jsonwebtoken';
 import config from '../config';
+import JwtHelper from './jwt-helper';
 
 const userRoutes = express.Router();
 
-userRoutes.get('/user', async (_req: Request, res: Response) => {
-  try {
-    const store = new UserStore();
+userRoutes.get(
+  '/user',
+  JwtHelper.verifyAuthToken,
+  async (_req: Request, res: Response) => {
+    try {
+      const store = new UserStore();
 
-    const result = await store.index();
+      const result = await store.index();
 
-    res.send(result);
-  } catch (error) {
-    console.log(error);
-    res
-      .status(500)
-      .send('There is an error, please contact the administrator.');
+      res.send(result);
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .send('There is an error, please contact the administrator.');
+    }
   }
-});
+);
 
-userRoutes.get('/user/:id', async (req: Request, res: Response) => {
-  try {
-    const store = new UserStore();
+userRoutes.get(
+  '/user/:id',
+  JwtHelper.verifyAuthToken,
+  async (req: Request, res: Response) => {
+    try {
+      const store = new UserStore();
 
-    const result = await store.show(req.params.id);
+      const result = await store.show(req.params.id);
 
-    res.send(result);
-  } catch (error) {
-    console.log(error);
-    res
-      .status(500)
-      .send('There is an error, please contact the administrator.');
+      res.send(result);
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .send('There is an error, please contact the administrator.');
+    }
   }
-});
+);
 
 userRoutes.post('/user', async (req: Request, res: Response) => {
   try {
