@@ -10,7 +10,7 @@
     "build": "npx tsc",
     "tsc": "tsc"
   },
-  "type": "module",
+  "type": "commonjs",
   "author": "Udacity",
   "license": "ISC",
   "dependencies": {
