@@ -1,31 +1,29 @@
 import request from 'supertest';
-import express from 'express';
 import app from '../../server';
 import assert from 'assert';
-import productRoutes from '../product-route';
 
-// const request = supertest(app);
-describe('POST /product', function () {
-  it('responds with json', function (done) {
-    const testProduct = {
-      name: 'product test',
-      price: 452,
-      category: 'category test',
-    };
-    return request(app)
-      .post('/product')
-      .auth('username', 'password')
-      .set('Accept', 'application/json')
-      .send(testProduct)
-      .expect('Content-Type', /json/)
-      .expect(200)
-      .then((response) => {
-        assert(response.body.name, testProduct.name);
-        done();
-      })
-      .catch((err) => done());
-  });
-});
+// describe('POST /product', function () {
+//   it('responds with json', async (done) => {
+//     const testProduct = {
+//       name: 'product test',
+//       price: 452,
+//       category: 'category test',
+//     };
+//     try {
+//       const response = await request(app)
+//         .post('/product')
+//         .auth('username', 'password')
+//         .set('Accept', 'application/json')
+//         .send(testProduct)
+//         .expect('Content-Type', /json/)
+//         .expect(200);
+//       assert(response.body.name, testProduct.name);
+//       done();
+//     } catch (err) {
+//       return done();
+//     }
+//   });
+// });
 
 // describe('Test user', () => {
 //   const product = {

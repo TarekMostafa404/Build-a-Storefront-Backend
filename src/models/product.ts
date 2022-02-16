@@ -1,4 +1,5 @@
 // @ts-ignore
+import { json } from 'body-parser';
 import Client from '../database';
 
 export type Product = {
@@ -44,7 +45,7 @@ export class ProductStore {
   async create(p: Product): Promise<Product> {
     try {
       const sql =
-        'INSERT INTO products (name, price, category) VALUES($1, $2, $3) RETURNING *';
+        'INSERT INTO public.products (name, price, category) VALUES($1, $2, $3) RETURNING *';
       // @ts-ignore
       const conn = await Client.connect();
 
@@ -56,7 +57,9 @@ export class ProductStore {
 
       return product;
     } catch (err) {
-      throw new Error(`Could not add a new product ${p}. Error: ${err}`);
+      throw new Error(
+        `Could not add a new product ${JSON.stringify(p)}. Error: ${err}`
+      );
     }
   }
 
