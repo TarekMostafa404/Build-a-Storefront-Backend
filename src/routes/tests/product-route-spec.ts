@@ -1,46 +1,75 @@
-import request from 'supertest';
-import app from '../../server';
-import assert from 'assert';
+import request from "supertest";
+import app from "../../server";
+import assert from "assert";
+import { UserStore, User } from "../../models/user";
+import pool from "../../database";
+import { Product } from "../../models/product";
 
-// describe('POST /product', function () {
-//   it('responds with json', async (done) => {
-//     const testProduct = {
-//       name: 'product test',
-//       price: 452,
-//       category: 'category test',
-//     };
-//     try {
-//       const response = await request(app)
-//         .post('/product')
-//         .auth('username', 'password')
-//         .set('Accept', 'application/json')
-//         .send(testProduct)
-//         .expect('Content-Type', /json/)
-//         .expect(200);
-//       assert(response.body.name, testProduct.name);
-//       done();
-//     } catch (err) {
-//       return done();
-//     }
-//   });
-// });
+describe("product routes", function () {
+  const userStore = new UserStore();
 
-// describe('Test user', () => {
-//   const product = {
-//     name: 'product test',
-//     price: 111,
-//     category: 'category test',
-//   } as Product;
+  const testUser = {
+    firstName: "user1",
+    lastName: "user1",
+    password: "123",
+  } as User;
 
-//   beforeAll(async () => {
-//     const createProduct = await productStore.create(product);
-//     product.name = createProduct.name;
-//   });
+  let token: string | null = null;
 
-//   afterAll(async () => {
-//     const conn = await pool.connect();
-//     const sql = 'DELETE FROM products';
-//     await conn.query(sql);
-//     conn.release();
-//   });
-// });
+  beforeAll(async () => {
+    const createUser = await userStore.create(testUser);
+    testUser.id = createUser.id;
+
+    const response = await request(app)
+      .post("/user/auth")
+      .set("Accept", "application/json")
+      .send(testUser);
+    token = response.body.data.token;
+  });
+
+  afterAll(async () => {
+    const conn = await pool.connect();
+
+    await conn.query("DELETE FROM products");
+    await conn.query("DELETE FROM users");
+
+    conn.release();
+  });
+
+  const testProduct = {
+    name: "product test",
+    price: 452,
+    category: "category test",
+  } as Product;
+
+  it("create product", async () => {
+    const response = await request(app)
+      .post("/product")
+      .set("Authorization", `Bearer ${token}`)
+      .set("Accept", "application/json")
+      .send(testProduct)
+      .expect(200);
+    assert(response.body.name, testProduct.name);
+    testProduct.id = response.body.id;
+  });
+
+  it("index all products", async () => {
+    const response = await request(app)
+      .get("/product")
+      .set("Authorization", `Bearer ${token}`)
+      .set("Accept", "application/json")
+      .send()
+      .expect(200);
+    assert(response.body.length > 0);
+  });
+
+  it("show a product", async () => {
+    const response = await request(app)
+      .get(`/product/${testProduct.id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .set("Accept", "application/json")
+      .send(testProduct)
+      .expect(200);
+    assert(response.body.name, testProduct.name);
+  });
+});

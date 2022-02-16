@@ -51,9 +51,10 @@ orderRoutes.post(
     try {
       const store = new OrderStore();
 
-      const quantity: number = parseInt(req.body.quantity);
       const orderId: number = parseInt(req.params.id);
+      const quantity: number = parseInt(req.body.quantity);
       const productId: number = req.body.productId;
+     
       const addedProduct = await store.addProduct(quantity, orderId, productId);
 
       res.json(addedProduct);
