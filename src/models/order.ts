@@ -61,7 +61,7 @@ export class OrderStore {
     quantity: number,
     orderID: number,
     productID: number
-  ): Promise<Order> {
+  ): Promise<boolean> {
     try {
       const sql =
         "INSERT INTO order_products ( quantity, order_id, product_id ) VALUES($1, $2, $3) RETURNING *";
@@ -70,11 +70,9 @@ export class OrderStore {
 
       const result = await conn.query(sql, [quantity, orderID, productID]);
 
-      const order = result.rows[0];
-
       conn.release();
 
-      return order;
+      return true;
     } catch (err) {
       throw new Error(`Could not add new order ${productID}. Error: ${err}`);
     }
